@@ -116,20 +116,6 @@ def depthFirstSearch(problem):
                 path = []
                 currentNode = nextNode
                 while currentNode is not initNode:
-                    # __debug__
-                    # pp =  travelAction[currentNode]
-                    # if pp is Directions.SOUTH:
-                    #     print "s "
-                    # elif pp is Directions.NORTH:
-                    #     print "n "
-                    # elif pp is Directions.EAST:
-                    #     print "e "
-                    # elif pp is Directions.WEST:
-                    #     print "w "
-                    # print currentNode
-                    # print travelParent[currentNode]
-                    # import time
-                    # time.sleep(1)
                     path.append(travelAction[currentNode])
                     currentNode = travelParent[currentNode]
                 path.reverse()
