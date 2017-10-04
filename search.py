@@ -70,7 +70,7 @@ def tinyMazeSearch(problem):
     from game import Directions
     s = Directions.SOUTH
     w = Directions.WEST
-    return  [s, s, w, s, w, w, s, w]
+    return [s, s, w, s, w, w, s, w]
 
 def depthFirstSearch(problem):
     """
@@ -87,7 +87,56 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    # util.raiseNotDefined()
+
+    initNode = problem.getStartState()
+
+    if problem.isGoalState(initNode):
+        return []
+    # first node is already a goal
+
+    explored = []
+    travelParent = {}
+    travelAction = {}
+    path = []
+    toVisit = util.Stack()
+    toVisit.push(initNode)
+
+    from game import Directions
+
+    while not toVisit.isEmpty():
+        currentNode = toVisit.pop()
+        explored.append(currentNode)
+        for (nextNode, action, cost) in problem.getSuccessors(currentNode):
+            if nextNode not in explored:
+                toVisit.push(nextNode)
+                travelParent[nextNode] = currentNode
+                travelAction[nextNode] = action
+            if problem.isGoalState(nextNode):
+                path = []
+                currentNode = nextNode
+                while currentNode is not initNode:
+                    # __debug__
+                    # pp =  travelAction[currentNode]
+                    # if pp is Directions.SOUTH:
+                    #     print "s "
+                    # elif pp is Directions.NORTH:
+                    #     print "n "
+                    # elif pp is Directions.EAST:
+                    #     print "e "
+                    # elif pp is Directions.WEST:
+                    #     print "w "
+                    # print currentNode
+                    # print travelParent[currentNode]
+                    # import time
+                    # time.sleep(1)
+                    path.append(travelAction[currentNode])
+                    currentNode = travelParent[currentNode]
+                path.reverse()
+                return path
+
+    # no solution
+    return
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
