@@ -165,7 +165,52 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    # util.raiseNotDefined()
+
+    # Dijkstra
+
+    initNode = problem.getStartState()
+
+    if problem.isGoalState(initNode):
+        return[]
+    # first node is already a goal
+
+    explored = []
+    travelParent = {}
+    travelAction = {}
+    path = []
+
+    distance = {}
+    toVisit = util.PriorityQueue()
+    toVisit.push(initNode, 0)
+    distance[initNode] = 0
+
+    from game import Directions
+
+    while not toVisit.isEmpty():
+        currentNode = toVisit.pop()
+        currentCost = distance[currentNode]
+        explored.append(currentNode)
+        for (nextNode, action, nextCost) in problem.getSuccessors(currentNode):
+            if nextNode not in explored:
+                newCost = currentCost + nextCost
+                if nextNode not in distance or newCost < distance[nextNode]:
+                    distance[nextNode] = newCost
+                    travelParent[nextNode] = currentNode
+                    travelAction[nextNode] = action
+                    toVisit.update(nextNode, newCost)
+            else:
+                continue
+            if problem.isGoalState(nextNode):
+                currentNode = nextNode
+                while currentNode is not initNode:
+                    path.append(travelAction[currentNode])
+                    currentNode = travelParent[currentNode]
+                path.reverse()
+                return path
+
+    # no solution
+    return
 
 def nullHeuristic(state, problem=None):
     """
