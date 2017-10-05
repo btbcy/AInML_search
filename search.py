@@ -102,8 +102,6 @@ def depthFirstSearch(problem):
     toVisit = util.Stack()
     toVisit.push(initNode)
 
-    from game import Directions
-
     while not toVisit.isEmpty():
         currentNode = toVisit.pop()
         explored.append(currentNode)
@@ -140,8 +138,6 @@ def breadthFirstSearch(problem):
     path = []
     toVisit = util.Queue()
     toVisit.push(initNode)
-
-    from game import Directions
 
     while not toVisit.isEmpty():
         currentNode = toVisit.pop()
@@ -185,22 +181,19 @@ def uniformCostSearch(problem):
     toVisit.push(initNode, 0)
     distance[initNode] = 0
 
-    from game import Directions
-
     while not toVisit.isEmpty():
         currentNode = toVisit.pop()
         currentCost = distance[currentNode]
         explored.append(currentNode)
         for (nextNode, action, nextCost) in problem.getSuccessors(currentNode):
-            if nextNode not in explored:
-                newCost = currentCost + nextCost
-                if nextNode not in distance or newCost < distance[nextNode]:
-                    distance[nextNode] = newCost
-                    travelParent[nextNode] = currentNode
-                    travelAction[nextNode] = action
-                    toVisit.update(nextNode, newCost)
-            else:
+            if nextNode in explored:
                 continue
+            newCost = currentCost + nextCost
+            if nextNode not in distance or newCost < distance[nextNode]:
+                distance[nextNode] = newCost
+                travelParent[nextNode] = currentNode
+                travelAction[nextNode] = action
+                toVisit.update(nextNode, newCost)
             if problem.isGoalState(nextNode):
                 currentNode = nextNode
                 while currentNode is not initNode:
@@ -222,8 +215,47 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    # util.raiseNotDefined()
 
+    initNode = problem.getStartState()
+
+    if problem.isGoalState(initNode):
+        return[]
+    # first node is already a goal
+
+    explored = []
+    travelParent = {}
+    travelAction = {}
+    path = []
+
+    distance = {}
+    toVisit = util.PriorityQueue()
+    toVisit.push(initNode, 0)
+    distance[initNode] = 0
+
+    while not toVisit.isEmpty():
+        currentNode = toVisit.pop()
+        currentCost = distance[currentNode]
+        explored.append(currentNode)
+        for (nextNode, action, nextCost) in problem.getSuccessors(currentNode):
+            if nextNode in explored:
+                continue
+            newCost = currentCost + nextCost + heuristic(nextNode, problem)
+            if nextNode not in distance or newCost < distance[nextNode]:
+                distance[nextNode] = newCost
+                travelParent[nextNode] = currentNode
+                travelAction[nextNode] = action
+                toVisit.update(nextNode, newCost)
+            if problem.isGoalState(nextNode):
+                currentNode = nextNode
+                while currentNode is not initNode:
+                    path.append(travelAction[currentNode])
+                    currentNode = travelParent[currentNode]
+                path.reverse()
+                return path
+
+    # no solution
+    return
 
 # Abbreviations
 bfs = breadthFirstSearch
