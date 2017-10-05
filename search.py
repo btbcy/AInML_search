@@ -113,7 +113,6 @@ def depthFirstSearch(problem):
                 travelParent[nextNode] = currentNode
                 travelAction[nextNode] = action
             if problem.isGoalState(nextNode):
-                path = []
                 currentNode = nextNode
                 while currentNode is not initNode:
                     path.append(travelAction[currentNode])
@@ -127,7 +126,41 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    # util.raiseNotDefined()
+
+    initNode = problem.getStartState()
+
+    if problem.isGoalState(initNode):
+        return[]
+    # first node is already a goal
+
+    explored = []
+    travelParent = {}
+    travelAction = {}
+    path = []
+    toVisit = util.Queue()
+    toVisit.push(initNode)
+
+    from game import Directions
+
+    while not toVisit.isEmpty():
+        currentNode = toVisit.pop()
+        explored.append(currentNode)
+        for (nextNode, action, cost) in problem.getSuccessors(currentNode):
+            if nextNode not in explored:
+                toVisit.push(nextNode)
+                travelParent[nextNode] = currentNode
+                travelAction[nextNode] = action
+            if problem.isGoalState(nextNode):
+                currentNode = nextNode
+                while currentNode is not initNode:
+                    path.append(travelAction[currentNode])
+                    currentNode = travelParent[currentNode]
+                path.reverse()
+                return path
+
+    # no solution
+    return
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
