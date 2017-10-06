@@ -184,6 +184,12 @@ def uniformCostSearch(problem):
     while not toVisit.isEmpty():
         currentNode = toVisit.pop()
         currentCost = distance[currentNode]
+        if problem.isGoalState(currentNode):
+            while currentNode is not initNode:
+                path.append(travelAction[currentNode])
+                currentNode = travelParent[currentNode]
+            path.reverse()
+            return path
         explored.append(currentNode)
         for (nextNode, action, nextCost) in problem.getSuccessors(currentNode):
             if nextNode in explored:
@@ -194,13 +200,6 @@ def uniformCostSearch(problem):
                 travelParent[nextNode] = currentNode
                 travelAction[nextNode] = action
                 toVisit.update(nextNode, newCost)
-            if problem.isGoalState(nextNode):
-                currentNode = nextNode
-                while currentNode is not initNode:
-                    path.append(travelAction[currentNode])
-                    currentNode = travelParent[currentNode]
-                path.reverse()
-                return path
 
     # no solution
     return 
@@ -236,6 +235,12 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     while not toVisit.isEmpty():
         currentNode = toVisit.pop()
         currentCost = distance[currentNode]
+        if problem.isGoalState(currentNode):
+            while currentNode is not initNode:
+                path.append(travelAction[currentNode])
+                currentNode = travelParent[currentNode]
+            path.reverse()
+            return path
         explored.append(currentNode)
         for (nextNode, action, nextCost) in problem.getSuccessors(currentNode):
             if nextNode in explored:
@@ -246,13 +251,6 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                 travelParent[nextNode] = currentNode
                 travelAction[nextNode] = action
                 toVisit.update(nextNode, newCost)
-            if problem.isGoalState(nextNode):
-                currentNode = nextNode
-                while currentNode is not initNode:
-                    path.append(travelAction[currentNode])
-                    currentNode = travelParent[currentNode]
-                path.reverse()
-                return path
 
     # no solution
     return []
