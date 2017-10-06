@@ -95,7 +95,7 @@ def depthFirstSearch(problem):
         return []
     # first node is already a goal
 
-    explored = []
+    explored = [initNode]
     travelParent = {}
     travelAction = {}
     path = []
@@ -104,9 +104,9 @@ def depthFirstSearch(problem):
 
     while not toVisit.isEmpty():
         currentNode = toVisit.pop()
-        explored.append(currentNode)
         for (nextNode, action, cost) in problem.getSuccessors(currentNode):
             if nextNode not in explored:
+                explored.append(nextNode)
                 toVisit.push(nextNode)
                 travelParent[nextNode] = currentNode
                 travelAction[nextNode] = action
@@ -119,7 +119,7 @@ def depthFirstSearch(problem):
                 return path
 
     # no solution
-    return
+    return []
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
@@ -132,7 +132,7 @@ def breadthFirstSearch(problem):
         return[]
     # first node is already a goal
 
-    explored = []
+    explored = [initNode]
     travelParent = {}
     travelAction = {}
     path = []
@@ -141,9 +141,9 @@ def breadthFirstSearch(problem):
 
     while not toVisit.isEmpty():
         currentNode = toVisit.pop()
-        explored.append(currentNode)
         for (nextNode, action, cost) in problem.getSuccessors(currentNode):
             if nextNode not in explored:
+                explored.append(nextNode)
                 toVisit.push(nextNode)
                 travelParent[nextNode] = currentNode
                 travelAction[nextNode] = action
@@ -203,7 +203,7 @@ def uniformCostSearch(problem):
                 return path
 
     # no solution
-    return
+    return 
 
 def nullHeuristic(state, problem=None):
     """
@@ -255,7 +255,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                 return path
 
     # no solution
-    return
+    return []
 
 # Abbreviations
 bfs = breadthFirstSearch
