@@ -271,6 +271,8 @@ class CornersProblem(search.SearchProblem):
     This search problem finds paths through all four corners of a layout.
 
     You must select a suitable state space and successor function
+
+    state: ((positionX, positionY), [(cornersX, cornersY)*4] )
     """
 
     def __init__(self, startingGameState):
@@ -295,14 +297,17 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # util.raiseNotDefined()
+        return (self.startingPosition, [])
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # util.raiseNotDefined()
+        # all coners are visted and stored
+        return len(state[1]) is len(self.corners)
 
     def getSuccessors(self, state):
         """
@@ -325,6 +330,15 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
+            x, y = state[0]
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            if not self.walls[nextx][nexty]:
+                visited = list(state[1])
+                if (nextx, nexty) in self.corners and (nextx, nexty) not in visited:
+                    visited.append((nextx, nexty))
+                nextState = ((nextx, nexty), tuple(visited))
+                successors.append((nextState, action, 1))
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
