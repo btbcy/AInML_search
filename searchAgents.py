@@ -490,7 +490,28 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+
+    # similiar to  cornersHeuristic
+
+    uneatenFood = foodGrid.asList()
+    nearestFood = position
+    dist = 0
+
+    while uneatenFood:
+        distToAdd = 999999
+        pos = nearestFood
+
+        # find the nearest food
+        for fd in uneatenFood:
+            smallestManhattan = util.manhattanDistance(pos, fd)
+            if smallestManhattan < distToAdd:
+                distToAdd = smallestManhattan
+                nearestFood = fd
+
+        dist += distToAdd
+        uneatenFood.remove(nearestFood)
+
+    return dist
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
