@@ -298,7 +298,7 @@ class CornersProblem(search.SearchProblem):
         """
         "*** YOUR CODE HERE ***"
         # util.raiseNotDefined()
-        return (self.startingPosition, [])
+        return (self.startingPosition, ())
 
     def isGoalState(self, state):
         """
@@ -374,7 +374,29 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
-    return 0 # Default to trivial solution
+    # return 0 # Default to trivial solution
+
+    # always find the nearest corner and sum
+
+    unvisited = [item for item in corners if item not in state[1]]
+    nearest = state[0]
+    dist = 0
+
+    while unvisited:
+        distToAdd = 999999
+        pos = nearest
+
+        # find the nearest corner
+        for cnr in unvisited:
+            smallestManhattan = util.manhattanDistance(pos, cnr)
+            if smallestManhattan < distToAdd:
+                distToAdd = smallestManhattan
+                nearest = cnr
+
+        dist += distToAdd
+        unvisited.remove(nearest)
+
+    return dist
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
