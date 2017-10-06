@@ -380,11 +380,11 @@ def cornersHeuristic(state, problem):
 
     unvisited = [item for item in corners if item not in state[1]]
     nearest = state[0]
+    pos = state[0]
     dist = 0
 
     while unvisited:
         distToAdd = 999999
-        pos = nearest
 
         # find the nearest corner
         for cnr in unvisited:
@@ -395,8 +395,21 @@ def cornersHeuristic(state, problem):
 
         dist += distToAdd
         unvisited.remove(nearest)
+        pos = nearest
 
     return dist
+
+# consider hole of wall in x and y directions
+# def manhattanHoleOfWallHeuristic(position1, position2, holes):
+#     xy1 = position1
+#     xy2 = position2
+#     dist = 999999
+# 
+#     while 
+# 
+#     return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
+# 
+# def nearestHoleHeuristic()
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
@@ -494,22 +507,21 @@ def foodHeuristic(state, problem):
     # similiar to  cornersHeuristic
 
     uneatenFood = foodGrid.asList()
-    nearestFood = position
     dist = 0
 
     while uneatenFood:
         distToAdd = 999999
-        pos = nearestFood
 
         # find the nearest food
         for fd in uneatenFood:
-            smallestManhattan = util.manhattanDistance(pos, fd)
+            smallestManhattan = util.manhattanDistance(position, fd)
             if smallestManhattan < distToAdd:
                 distToAdd = smallestManhattan
                 nearestFood = fd
 
-        dist += distToAdd
         uneatenFood.remove(nearestFood)
+        dist += distToAdd
+        pos = nearestFood
 
     return dist
 
